@@ -18,6 +18,10 @@ int main()
     int valueOfA;
     int valueOfB;
     int valueOfC;
+    int factorableOrNot;
+    string sign;
+    string sign2;
+    
     
     //two factors that are found
     int firstFactor;
@@ -40,10 +44,32 @@ int main()
         // if the function returns 0 it means that there werent any
         // factors found, the only other option is that the function
         // returns 1 and the 2 factors are found
-        if (findFactors(valueOfA, valueOfB, valueOfC, firstFactor, secondFactor) == 0)
+        
+        factorableOrNot = findFactors(valueOfA, valueOfB, valueOfC, firstFactor, secondFactor);
+        
+        if (firstFactor > 0)
+            sign = "+";
+        else
+        {
+            sign = "-";
+            firstFactor *= -1;
+        }
+        if (secondFactor > 0)
+            sign2 = "+";
+        else
+        {
+            sign2 = "-";
+            secondFactor *= -1;
+        }
+            
+        
+        
+        
+        
+        if (factorableOrNot == 0)
             cout << "No factors Found" << endl;
         else
-            cout << firstFactor << " and " << secondFactor;
+            cout << "(x " <<  sign  << " " << firstFactor <<  ") and (x " << sign2 << " " << secondFactor << ")";
     }
     return 0;
 }
@@ -89,8 +115,26 @@ int findFactors(int valueA, int valueB, int valueC, int& valueOne, double& value
         // if all possible combinations have been tried then the trinomial is deemed unfactorable
         if(startValue == valueOfMultiplied - 1)
         {
-            unfactorable = true;
+            startValue = -1;
+            for(;factorFound == false && unfactorable == false; startValue--)
+            {
+                // the second value is found by dividing the start value by the value multiplied
+                // to try to find all possible common factors of the value multiplied(A times C)
+                secondValue = double(valueOfMultiplied) / double(startValue);
+                
+                // if the "B" value is equal to the sum of the "A" and "C" values then
+                // assign true to factorfound and assign values to reference variables
+                if(secondValue + startValue == valueB)
+                {
+                    valueOne = startValue;
+                    valueTwo = secondValue;
+                    factorFound = true;
+                }
+            }
+            if (factorFound == false)
+                unfactorable = true;
         }
+        
     }
     
   // return the value that correlates with whether the trinomial is factorable or not
